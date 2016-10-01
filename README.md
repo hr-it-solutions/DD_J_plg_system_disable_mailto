@@ -6,8 +6,6 @@ ia s Joomla! system plugin to disable mailto function
 Description etc....                  <br>
 ...
 
-Tracking URL, Verfiy ID and Alexa Certify Code, must be specified at plugin settings.
-
 # System requirements
 Joomla 3.x +                                                                                <br>
 PHP 5.6.13 or newer is recommended.

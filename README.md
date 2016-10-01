@@ -11,8 +11,8 @@ It´s possible to disable mailto function for each article, but not globally by 
 Here that Disable MailTo Plugin helps. It allows the activation and deactivation of the component by plugin settins.      <br>
 By default, com_mailto will be disabled. Just need to install Disable MailTo, it´s all, simple and effective.             <br>
 
-This Plugin is like a switch to fire enable/disable com_mailto just on plugin save. So, it´s not realay a System Plugin, it´s a way beetween to optimize page load performance and bring that feature.                                                        <br>
-                                                                                                                          <br>
+This Plugin is like a switch to fire enable/disable com_mailto just on plugin save. So, it´s not realay a System Plugin,  <br> 
+it´s a way beetween to optimize page load performance and bring that feature.                                             <br>
 **Plugin must be enabled to trigger enable/disable events. To undo changes, just need to uninstall Plugin.**              <br>
 
 # System requirements

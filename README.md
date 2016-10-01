@@ -3,7 +3,7 @@ is a simple Joomla! system plugin to disable mailto function.
 
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=102)](https://opensource.org/licenses/GPL-2.0/)  
 
-This plugin disables also the "recommend to a friend link" and the "recommend to a friend form" from frontend."           <br>
+This plugin disables also the "recommend to a friend link" and the "recommend to a friend form" from frontend.            <br>
                                                                                                                           <br>
 By default, Joomla! has no option to disables these, because it comes from locked com_mailto component.                   <br>
 It's possible to disable mailto function for each article, but not globally by simply disabling com_mailto.               <br>

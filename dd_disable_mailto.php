@@ -22,7 +22,7 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	const NAME = 'dd_disable_mailto';
 
 	/**
-	 * onUserAfterSave Events
+	 * Construct Events
 	 * @since Version 3.6.2
 	 */
 	function __construct( $subject )
@@ -30,10 +30,11 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 
 		parent::__construct($subject);
 
-		if (JFactory::getApplication()->isAdmin()){ // Trigger Events only in Backend
+		$app = JFactory::getApplication();
 
-			$input = JFactory::getApplication()->input;
-			$option = $input->get->get("option",0,"STR");
+		if ($app->isAdmin()){ // Trigger Events only in Backend
+
+			$option = $app->input->get->get("option",0,"STR");
 
 			if($option === "com_plugins" ){ // And only on plugin page, to save performance
 

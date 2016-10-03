@@ -45,7 +45,7 @@
                 </field>
                 <field name="redirect_mailto"
                        type="radio"
-                       default="0"
+                       default="1"
                        label="PLG_SYSTEM_DD_DISABLE_MAILTO_FIELD_REDIRECT_MAILTO_LABEL"
                        description="PLG_SYSTEM_DD_DISABLE_MAILTO_FIELD_REDIRECT_MAILTO"
                        class="btn-group" >

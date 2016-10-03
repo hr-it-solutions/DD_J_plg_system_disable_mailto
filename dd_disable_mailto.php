@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    1-1-0-0 // Y-m-d 2016-10-01
+ * @version    1-2-0-0 // Y-m-d 2016-10-04
  * @author     Didldu e.K. Florian Häusler https://www.hr-it-solutions.com
  * @copyright  Copyright (C) 2011 - 2016 Didldu e.K. | HR IT-Solutions
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
@@ -22,7 +22,7 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	const NAME = 'dd_disable_mailto';
 
 	/**
-	 * onUserAfterSave Events
+	 * Construct Events
 	 * @since Version 3.6.2
 	 */
 	function __construct( $subject )
@@ -30,16 +30,17 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 
 		parent::__construct($subject);
 
-		if (JFactory::getApplication()->isAdmin()){ // Trigger Events only in Backend
+		// Load plugin parameters
+		$this->plugin = JPluginHelper::getPlugin(self::TYPE, self::NAME);
+		$this->params = new JRegistry($this->plugin->params);
 
-			$input = JFactory::getApplication()->input;
-			$option = $input->get->get("option",0,"STR");
+		$app = JFactory::getApplication();
+
+		if ($app->isAdmin()){ // Trigger Events only in Backend
+
+			$option = $app->input->get->get("option",0,"STR");
 
 			if($option === "com_plugins" ){ // And only on plugin page, to save performance
-
-				// Load plugin parameters
-				$this->plugin = JPluginHelper::getPlugin(self::TYPE, self::NAME);
-				$this->params = new JRegistry($this->plugin->params);
 
 				$disable_mailTo = $this->params->get('disable_mailto',0);
 
@@ -52,7 +53,67 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 			}
 
 		}
+	}
 
+
+	/**
+	 * onAfterRoute Event
+	 * - redirectOldMailtoLinks
+	 * @since Version 3.6.2
+	 */
+	public function onAfterRoute(){
+
+		// Redirect old mailTo otion
+		if ($this->params->get('redirect_mailto',0))
+		{
+			$this->redirectOldMailtoLinks(); // Redirect
+		}
+
+	}
+
+	/**
+	 * onAfterRender Event
+	 * - remveMailtoLink
+	 * @since Version 3.6.2
+	 */
+	public function onAfterRender()
+	{
+		$app = JFactory::getApplication();
+		// Front end
+		if ($app instanceof JApplicationSite)
+		{
+
+			if ($this->params->get('remove_mailto_link',0)) // Remove mailTo link Option
+			{
+				$html = $app->getBody();
+				$html = $this->remveMailtoLink($html);
+				$app->setBody($html);
+			}
+
+		}
+	}
+
+
+	/**
+	 * Remove bootstrap mailto list link (like protostar, etc...) method
+	 * @return string without list elemenent email-icon
+	 * @since Version 3.6.2
+	 */
+	private function remveMailtoLink($content)
+	{
+		return preg_replace('#<li class="email-icon">(.*?)</li>#', ' ', $content);
+	}
+
+	/**
+	 * Redirect old mailto links to home by HTTP STATUS 301 method
+	 * @return string without list elemenent email-icon
+	 * @since Version 3.6.2
+	 */
+	private function redirectOldMailtoLinks()
+	{
+		if(strpos(JUri::current(), 'component/mailto') !== false){
+			JFactory::getApplication()->redirect(JURI::base(),301);
+		}
 	}
 
 	/**

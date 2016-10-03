@@ -11,12 +11,12 @@ It´s possible to disable mailto function for each article, but not globally by 
 Here that Disable MailTo Plugin helps. It allows the activation and deactivation of the component by plugin settins.      <br>
 By default, com_mailto will be disabled. Just need to install Disable MailTo, it´s all, simple and effective.             <br>
 
-**All features through plugin settings:**                                                                                 <br>
+**All features through plugin settings:**
 - Redirect SEO old component mailto links to homepage by 301
 - Remove link to friend link from fontend article settings dropdown
 - And the described switch to enable/disable com_mailto
 
-Note: This plugin is like a switch to fire enable/disable com_mailto just on plugin save. So, it´s not realy a system plugin feature, it´s a way beetween to optimize page load performance and bring that feature.
+Note: This plugin is like a switch to fire enable/disable com_mailto just on plugin save. So, it´s not realy a system plugin feature, it´s a way beetween to optimize page load performance and bring that feature.<br>
 **Plugin must be enabled to trigger enable/disable events. To undo changes, just need to uninstall plugin.**              <br>
 
 # System requirements

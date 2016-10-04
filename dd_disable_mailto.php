@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    1-2-0-0 // Y-m-d 2016-10-04
+ * @version    1-2-1-0 // Y-m-d 2016-10-04
  * @author     Didldu e.K. Florian Häusler https://www.hr-it-solutions.com
  * @copyright  Copyright (C) 2011 - 2016 Didldu e.K. | HR IT-Solutions
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
@@ -112,7 +112,8 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	private function redirectOldMailtoLinks()
 	{
 		if(strpos(JUri::current(), 'component/mailto') !== false){
-			JFactory::getApplication()->redirect(JURI::base(),301);
+			$alternativeURL = $this->params->get('redirect_mailto_url');
+			JFactory::getApplication()->redirect(JURI::base() . $alternativeURL,301);
 		}
 	}
 

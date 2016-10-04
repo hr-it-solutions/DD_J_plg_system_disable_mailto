@@ -12,7 +12,7 @@ Here that Disable MailTo Plugin helps. It allows the activation and deactivation
 By default, com_mailto will be disabled. Just need to install Disable MailTo, it´s all, simple and effective.             <br>
 
 **All features through plugin settings:**
-- Redirect SEO old component mailto links to homepage by 301 or to custom URL
+- Redirect SEO old component mailto links to homepage or to custom URL by 301
 - Remove link to friend link from fontend article settings dropdown
 - And the described switch to enable/disable com_mailto
 

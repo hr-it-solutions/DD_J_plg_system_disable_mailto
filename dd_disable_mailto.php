@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    1-2-1-0 // Y-m-d 2016-10-04
+ * @version    1-2-2-0 // Y-m-d 2016-10-04
  * @author     HR IT-Solutions Florian Häusler https://www.hr-it-solutions.com
  * @copyright  Copyright (C) 2011 - 2016 Didldu e.K. | HR IT-Solutions
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
@@ -16,6 +16,8 @@ jimport('joomla.access.access');
  */
 class plgSystemDD_Disable_MailTo extends JPlugin
 {
+
+	protected $app;
 
 	// Plugin info constants
 	const TYPE = 'system';
@@ -34,11 +36,9 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 		$this->plugin = JPluginHelper::getPlugin(self::TYPE, self::NAME);
 		$this->params = new JRegistry($this->plugin->params);
 
-		$app = JFactory::getApplication();
+		if ($this->app->isAdmin()){ // Trigger Events only in Backend
 
-		if ($app->isAdmin()){ // Trigger Events only in Backend
-
-			$option = $app->input->get->get("option",0,"STR");
+			$option = $this->app->input->get->get("option",0,"STR");
 
 			if($option === "com_plugins" ){ // And only on plugin page, to save performance
 
@@ -78,16 +78,15 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	 */
 	public function onAfterRender()
 	{
-		$app = JFactory::getApplication();
 		// Front end
-		if ($app instanceof JApplicationSite)
+		if ($this->app instanceof JApplicationSite)
 		{
 
 			if ($this->params->get('remove_mailto_link',0)) // Remove mailTo link Option
 			{
-				$html = $app->getBody();
+				$html = $this->app->getBody();
 				$html = $this->remveMailtoLink($html);
-				$app->setBody($html);
+				$this->app->setBody($html);
 			}
 
 		}
@@ -113,7 +112,7 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	{
 		if(strpos(JUri::current(), 'component/mailto') !== false){
 			$alternativeURL = $this->params->get('redirect_mailto_url');
-			JFactory::getApplication()->redirect(JURI::base() . $alternativeURL,301);
+			$this->app->redirect(JURI::base() . $alternativeURL,301);
 		}
 	}
 

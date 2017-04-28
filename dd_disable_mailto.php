@@ -1,8 +1,9 @@
 <?php
 /**
- * @version    1-2-2-0 // Y-m-d 2017-02-26
- * @author     HR IT-Solutions Florian Häusler https://www.hr-it-solutions.com
- * @copyright  Copyright (C) 2011 - 2016 Didldu e.K. | HR IT-Solutions
+ * @package    DD_Disable_MailTo
+ *
+ * @author     HR IT-Solutions Florian Häusler <info@hr-it-solutions.com>
+ * @copyright  Copyright (C) 2011 - 2017 Didldu e.K. | HR IT-Solutions
  * @license    http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
  **/
 
@@ -16,7 +17,6 @@ jimport('joomla.access.access');
  */
 class plgSystemDD_Disable_MailTo extends JPlugin
 {
-
 	protected $app;
 
 	// Plugin info constants
@@ -25,33 +25,34 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 
 	/**
 	 * Construct Events
-	 * @since Version 3.6.2
+	 *
+	 * @since Version 1.2.2.1
 	 */
 	function __construct( $subject )
 	{
-
 		parent::__construct($subject);
 
 		// Load plugin parameters
 		$this->plugin = JPluginHelper::getPlugin(self::TYPE, self::NAME);
 		$this->params = new JRegistry($this->plugin->params);
 
-		if ($this->app->isAdmin()){ // Trigger Events only in Backend
+		if ($this->app->isAdmin()) // Trigger Events only in Backend
+		{
+			$option = $this->app->input->get->get("option", 0, "STR");
 
-			$option = $this->app->input->get->get("option",0,"STR");
+			if ($option === "com_plugins" ) // And only on plugin page, to save performance
+			{
+				$disable_mailTo = $this->params->get('disable_mailto', 0);
 
-			if($option === "com_plugins" ){ // And only on plugin page, to save performance
-
-				$disable_mailTo = $this->params->get('disable_mailto',0);
-
-				if(!$disable_mailTo){
+				if (!$disable_mailTo)
+				{
 					$this->set_mailTo(false);
-				} else {
+				}
+				else
+				{
 					$this->set_mailTo();
 				}
-
 			}
-
 		}
 	}
 
@@ -59,67 +60,77 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 	/**
 	 * onAfterRoute Event
 	 * - redirectOldMailtoLinks
-	 * @since Version 3.6.2
+	 *
+	 * @since Version 1.2.2.1
 	 */
 	public function onAfterRoute(){
 
 		// Redirect old mailTo otion
-		if ($this->params->get('redirect_mailto',0))
+		if ($this->params->get('redirect_mailto', 0))
 		{
-			$this->redirectOldMailtoLinks(); // Redirect
+			$this->redirectOldMailtoLinks();
 		}
 
 	}
 
 	/**
 	 * onAfterRender Event
-	 * - remveMailtoLink
-	 * @since Version 3.6.2
+	 * remveMailtoLink
+	 *
+	 * @since Version 1.2.2.1
 	 */
 	public function onAfterRender()
 	{
 		// Front end
 		if ($this->app instanceof JApplicationSite)
 		{
-
-			if ($this->params->get('remove_mailto_link',0)) // Remove mailTo link Option
+			if ($this->params->get('remove_mailto_link', 0)) // Remove mailTo link Option
 			{
 				$html = $this->app->getBody();
 				$html = $this->remveMailtoLink($html);
 				$this->app->setBody($html);
 			}
-
 		}
 	}
 
 
 	/**
 	 * Remove bootstrap mailto list link (like protostar, etc...) method
-	 * @return string without list elemenent email-icon
-	 * @since Version 3.6.2
+	 *
+	 * @param   string  $content  the content to replace
+	 *
+	 * @return  string  without list elemenent email-icon
+	 *
+	 * @since Version 1.2.2.1
 	 */
 	private function remveMailtoLink($content)
 	{
-		return preg_replace('#<li class="email-icon">(.*?)</li>#', ' ', $content);
+		return preg_replace('/<li class=\"email-icon\">(.*?)<\/li>/s', ' ', $content);
 	}
 
 	/**
 	 * Redirect old mailto links to home by HTTP STATUS 301 method
-	 * @return string without list elemenent email-icon
-	 * @since Version 3.6.2
+	 *
+	 * @since Version 1.2.0.0
 	 */
 	private function redirectOldMailtoLinks()
 	{
-		if(strpos(JUri::current(), 'component/mailto') !== false){
+		if (strpos(JUri::current(), 'component/mailto') !== false)
+		{
 			$alternativeURL = $this->params->get('redirect_mailto_url');
-			$this->app->redirect(JURI::base() . $alternativeURL,301);
+
+			$this->app->redirect(JURI::base() . $alternativeURL, 301);
 		}
+
+		return true;
 	}
 
 	/**
 	 * Enable / Disable com_mailto extension method
-	 * @param $enable boolean true = enabled
-	 * @since Version 3.6.2
+	 *
+	 * @param   boolean  $enable  true = enabled
+	 *
+	 * @since  Version 1.0.0.0
 	 */
 	private function set_mailTo($enable = true)
 	{
@@ -127,11 +138,10 @@ class plgSystemDD_Disable_MailTo extends JPlugin
 		$db  = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->update('#__extensions')
-			->set($db->quoteName('enabled') . ' = ' . $enable)
-			->where($db->quoteName('element') . ' = ' . $db->quote('com_mailto'))
-			->where($db->quoteName('type') . ' = ' . $db->quote('component'));
+			->set($db->qn('enabled') . ' = ' . $enable)
+			->where($db->qn('element') . ' = ' . $db->q('com_mailto'))
+			->where($db->qn('type') . ' = ' . $db->q('component'));
 		$db->setQuery($query);
 		$db->execute();
 	}
-
 }
